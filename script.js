@@ -31,21 +31,58 @@ function renderTodos() {
                         <p>No tasks yet. Add one above to get started!</p>
                     </div>
                 `;
-  } else {
-    todoList.innerHTML = todos
-      .map(
-        (todo, index) => `
-                    <li class="todo-item ${todo.completed ? "completed" : ""}">
-                        <div class="todo-checkbox ${todo.completed ? "checked" : ""}" onclick="toggleTodo(${index})"></div>
-                        <span class="todo-text">${todo.text}</span>
-                        <button class="delete-btn" onclick="deleteTodo(${index})">Delete</button>
-                    </li>
-                `,
-      )
-      .join("");
-  }
-  updateStats();
+  } 
+    else {
+  todoList.innerHTML = ""; // clear old list
+
+  todos.forEach((todo, index) => {
+    
+    // 1️⃣ Create li
+    const li = document.createElement("li");
+    li.className = "todo-item";
+
+    if (todo.completed) {
+      li.classList.add("completed");
+    }
+
+    // 2️⃣ Create checkbox
+    const checkbox = document.createElement("div");
+    checkbox.className = "todo-checkbox";
+
+    if (todo.completed) {
+      checkbox.classList.add("checked");
+    }
+
+    checkbox.addEventListener("click", () => {
+      toggleTodo(index);
+    });
+
+    // 3️⃣ Create text
+    const span = document.createElement("span");
+    span.className = "todo-text";
+    span.textContent = todo.text;
+
+    // 4️⃣ Create delete button
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "delete-btn";
+    deleteBtn.textContent = "Delete";
+
+    deleteBtn.addEventListener("click", () => {
+      deleteTodo(index);
+    });
+
+    // 5️⃣ Append everything
+    li.appendChild(checkbox);
+    li.appendChild(span);
+    li.appendChild(deleteBtn);
+
+    todoList.appendChild(li);
+  });
 }
+
+  updateStats();
+  }
+
 
 function addTodo() {
   const text = todoInput.value.trim();
